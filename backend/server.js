@@ -12,7 +12,8 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true,
 });
 
-app.use("/api/auth", require("./routes/auth"));
+//app.use("/api/auth", require("./routes/auth"));
+app.use("/api/cars", require("./routes/cars"));
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");
