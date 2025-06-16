@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Car, Plus, Edit2, Trash2, Search, Home, BarChart3, Calendar, Settings, HelpCircle, LogOut, MapPin, Users, DollarSign, TrendingUp } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
-// Dashboard Components
 const DashboardStats = ({ cars }) => {
   const totalCars = cars.length;
   const availableCars = cars.filter(car => car.available).length;
   const rentedCars = cars.filter(car => !car.available).length;
   const avgPrice = Math.round(cars.reduce((sum, car) => sum + car.pricePerDay, 0) / cars.length);
   const totalRevenue = cars.filter(car => !car.available).reduce((sum, car) => sum + car.pricePerDay, 0);
+
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -635,6 +636,12 @@ export default function DrivioDashboard() {
     { id: 'bookings', label: 'Bookings', icon: Calendar },
   ];
 
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/signin"); 
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
@@ -684,7 +691,7 @@ export default function DrivioDashboard() {
           </div>
           
           <div className="absolute bottom-4 px-4">
-            <button className="flex items-center py-3 text-gray-600 hover:bg-gray-100 rounded-lg px-2">
+            <button onClick={handleLogout} className="flex items-center py-3 text-gray-600 hover:bg-gray-100 rounded-lg px-2">
               <LogOut className="w-5 h-5 mr-3" />
               Log Out
             </button>
