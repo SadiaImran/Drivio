@@ -11,19 +11,18 @@ const SignUp = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
-    alert("Signup successful");
-    // e.preventDefault();
-    // setIsLoading(true);
+    e.preventDefault();
+    setIsLoading(true);
     
-    // try {
-    //   await axios.post("http://localhost:5000/api/auth/signup", form);
-    //   alert("Signup successful");
-    //   navigate("/signin");
-    // } catch (err) {
-    //   alert(err.response?.data?.error || "Signup failed");
-    // } finally {
-    //   setIsLoading(false);
-    // }
+    try {
+      await axios.post("http://localhost:5000/api/auth/signup", form);
+      alert("Signup successful");
+      navigate("/signin");
+    } catch (err) {
+      alert(err.response?.data?.error || "Signup failed");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

@@ -9,11 +9,8 @@ function App() {
         <Route path="/" element={<Navigate to="/signin" replace />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-
       </Routes>
     </BrowserRouter>
   );
 }
-
 export default App;
