@@ -22,7 +22,11 @@ const SignIn = () => {
       const res = await axios.post("http://localhost:5000/api/auth/signin", form);
       localStorage.setItem("token", res.data.token);
       alert("Login successful");
-      navigate("/dashboard");
+      if(res.data.role == 'admin'){
+        navigate('/admin-dashboard');
+      }else{
+        navigate("/dashboard");
+      }
     } catch (err) {
       alert(err.response?.data?.error || "Login failed");
     }

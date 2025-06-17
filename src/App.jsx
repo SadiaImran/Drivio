@@ -29,6 +29,14 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route
+          path="/admin-dashboard"
+          element={
+            <PrivateRoute>
+              <DrivioDashboard />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
