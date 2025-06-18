@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const SignIn = () => {
     const navigate = useNavigate();
@@ -13,24 +14,34 @@ const SignIn = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+  
     if (!form.email || !form.password) {
       alert("Please fill in all fields");
       return;
     }
-    e.preventDefault();
+  
     try {
+      setIsLoading(true); // Optional: to show loading state
       const res = await axios.post("http://localhost:5000/api/auth/signin", form);
+  
       localStorage.setItem("token", res.data.token);
+      const token = localStorage.getItem("token");
+      const decoded = jwtDecode(token);
       alert("Login successful");
-      if(res.data.role == 'admin'){
-        navigate('/admin-dashboard');
-      }else{
+        if (decoded.role === "admin") {
+        navigate("/admin-dashboard");
+      } else {
         navigate("/dashboard");
       }
+  
     } catch (err) {
       alert(err.response?.data?.error || "Login failed");
+    } finally {
+      setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-sky-50 px-4 py-8 relative">

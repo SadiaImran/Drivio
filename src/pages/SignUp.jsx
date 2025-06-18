@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
-  const [form, setForm] = useState({ name: "", email: "", password: "" , role : "user" });
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -98,23 +98,6 @@ const SignUp = () => {
                 className="w-full pl-12 pr-4 py-4 bg-gray-50/70 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-300 placeholder-gray-500 hover:border-blue-300"
               />
             </div>
-            <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="role"
-              className="mr-2"
-              onChange={(e) => {
-                var set = 'user' ; 
-                if(e.target.checked){
-                    set = 'admin';
-                }
-                setForm({...form, role: set});
-              }}
-            />
-            <label htmlFor="available" className="text-sm font-medium text-gray-700">
-              Adimn Role
-            </label>
-          </div>
 
             {/* Submit Button */}
             <button
