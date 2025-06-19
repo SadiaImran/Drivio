@@ -4,7 +4,6 @@ import { Car, Calendar, Users, Fuel, Settings, MapPin, Star, Clock , LogOut} fro
 // Import the actual libraries (you need to install these)
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-
 import { useNavigate } from "react-router-dom";
 
 
@@ -28,7 +27,7 @@ const UserDashboard = () => {
   const [bookingLoading, setBookingLoading] = useState(null);
   const [selectedType, setSelectedType] = useState("all");
   const userId = getUserIdFromToken();
-
+  const [bookings, setBookings] = useState([]);
   useEffect(() => {
     const fetchCars = async () => {
       try {
@@ -46,6 +45,19 @@ const UserDashboard = () => {
 
     fetchCars();
   }, []);
+
+  useEffect(() => {
+      if (!userId) {
+          console.error("User ID not found in token");
+          return;
+      }
+      axios
+        .get(`http://localhost:5000/api/bookings/user/${userId}`)
+
+        .then((res) => {setBookings(res.data) ;})
+        .finally(() => setLoading(false));
+    },[bookings] ); 
+
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -359,6 +371,36 @@ const UserDashboard = () => {
             </p>
           </div>
         )}
+
+       {
+       <div>
+      <h2 className="text-2xl font-bold mb-4">My Bookings</h2>
+      {bookings.length === 0 ? (
+        <div>No bookings found.</div>
+      ) : (
+        <table className="min-w-full bg-white rounded shadow">
+          <thead>
+            <tr>
+              <th className="py-2 px-4 text-left">Car</th>
+              <th className="py-2 px-4 text-left">From</th>
+              <th className="py-2 px-4 text-left">To</th>
+              <th className="py-2 px-4 text-left">Total Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bookings.map((b) => (
+              <tr key={b._id}>
+                <td className="py-2 px-4">{b.carId?.name}</td>
+                <td className="py-2 px-4">{new Date(b.fromDate).toLocaleDateString()}</td>
+                <td className="py-2 px-4">{new Date(b.toDate).toLocaleDateString()}</td>
+                <td className="py-2 px-4">${b.totalCost}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+      }
       </div>
     </div>
   );

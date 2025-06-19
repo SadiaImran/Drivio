@@ -2,8 +2,6 @@ const router = require("express").Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const crypto = require("crypto"); // For generating reset token
-const nodemailer = require("nodemailer"); 
 
 // Signup
 router.post("/signup", async (req, res) => {

@@ -397,6 +397,9 @@ const CarManagement = () => {
       .catch(() => alert('Error fetching cars'));
   }, []);
 
+  // Fetch bookings from backend
+  
+
   const filteredCars = cars.filter(car =>
     car.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     car.number?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -576,7 +579,7 @@ const CarManagement = () => {
 
 // Main App Component
 export default function DrivioDashboard() {
-  const [activeSection, setActiveSection] = useState('dashboard');
+  const [activeSection, setActiveSection] = useState('car-management');
   const [cars, setCars] = useState([
     {
       name: "Nissan GT-R",
@@ -635,6 +638,14 @@ export default function DrivioDashboard() {
     { id: 'car-management', label: 'Car Management', icon: Car },
     { id: 'bookings', label: 'Bookings', icon: Calendar },
   ];
+  
+  const [bookings, setBookings] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/bookings")
+      .then(res => setBookings(res.data))
+      .catch(() => setBookings([]));
+  }, []);
 
   const navigate = useNavigate();
   const handleLogout = () => {
@@ -726,6 +737,42 @@ export default function DrivioDashboard() {
           <div className="p-8">
             <h2 className="text-3xl font-bold text-gray-800">Bookings</h2>
             <p className="text-gray-600 mt-1">Bookings section coming soon...</p>
+          </div>
+        )}
+        
+        {activeSection === 'bookings' && (
+          <div className="p-8">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">Bookings</h2>
+            
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-semibold text-gray-800">Recent Bookings</h3>
+                <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">View All</button>
+              </div>
+              
+              <table className="min-w-full">
+                <thead>
+                  <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
+                    <th className="py-3 px-4 text-left">User</th>
+                    <th className="py-3 px-4 text-left">Car</th>
+                    <th className="py-3 px-4 text-left">From</th>
+                    <th className="py-3 px-4 text-left">To</th>
+                    <th className="py-3 px-4 text-left">Total Cost</th>
+                  </tr>
+                </thead>
+                <tbody className="text-gray-700 text-sm font-medium">
+                  {bookings.map(b => (
+                    <tr key={b._id} className="hover:bg-gray-50 transition-colors">
+                      <td className="py-3 px-4">{b.userId?.name || b.userId?.email}</td>
+                      <td className="py-3 px-4">{b.carId?.name}</td>
+                      <td className="py-3 px-4">{new Date(b.fromDate).toLocaleDateString()}</td>
+                      <td className="py-3 px-4">{new Date(b.toDate).toLocaleDateString()}</td>
+                      <td className="py-3 px-4">${b.totalCost}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 const SignIn = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
